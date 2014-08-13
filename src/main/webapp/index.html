@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="chatter.css" media="screen" />
+</head>
+<body>
+<h1>WebSocket test</h1>
+<script src="index.js"></script>
+<!-- script src="chatter.js"></script-->
+<!-- script src="angular.min.js"></script -->
+<script>
+    window.onload=function(){
+    var addUserToList, send, sendChatMsg, showMsg, ws;
+    };
+</script>
+<form id="msg">
+    <div>
+        <select id="userList"/>
+    </div>
+    <div>
+        <input type="text" id="message"/>
+    </div>
+
+    <div>
+        <input readonly="true" type="button" onclick="sendChatMsg(document.getElementById('userList').value, document.getElementById('message').value)">
+    </div>
+
+    <div>
+        <textarea rows='15' cols="30" name="receivedChats" id="receivedChats"></textarea>
+    </div>
+
+</form>
+
+</body>
+</html>

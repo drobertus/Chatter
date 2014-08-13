@@ -1,0 +1,62 @@
+import org.gradle.plugins.javascript.coffeescript.CoffeeScriptCompile
+
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'war'
+apply plugin: 'coffeescript-base'
+
+
+repositories {
+    mavenCentral()
+    maven { url "http://repo.gradle.org/gradle/javascript-public/" }
+}
+
+configurations {
+    compile.exclude module: 'groovy-all'
+}
+
+dependencies {
+    compile (
+        localGroovy(),
+        //'org.volcra.coffee:coffee-compiler:1.0.0-SNAPSHOT',
+        'org.eclipse.jetty:jetty-server:9.2.1.v20140609',
+        'org.eclipse.jetty.websocket:websocket-common:9.2.1.v20140609',
+        'org.eclipse.jetty.websocket:websocket-server:9.2.1.v20140609',
+        'org.eclipse.jetty.websocket:websocket-servlet:9.2.1.v20140609',
+
+            'org.eclipse.jetty:jetty-webapp:9.2.1.v20140609',
+    )
+    // TODO: Add dependencies here ...
+    // You can read more about how to add dependency here:
+    //   http://www.gradle.org/docs/current/userguide/dependency_management.html#sec:how_to_declare_your_dependencies
+    testCompile(
+        //TODO: fins a version of spock that we need for this sucker
+//
+        'org.spockframework:spock-core:0.7-groovy-2.0',
+//        'org.seleniumhq.webdriver:webdriver-chrome:0.9.7376',
+//        'org.seleniumhq.selenium:selenium-chrome-driver:2.42.2',
+
+        group: 'junit', name: 'junit', version: '4.10',
+        'org.eclipse.jetty:jetty-webapp:9.2.2.v20140723',
+    )
+}
+
+
+task compileCoffee(type: CoffeeScriptCompile) {
+    CoffeeScriptCompileOptions opts = new CoffeeScriptCompileOptions()
+    opts.setEncoding( '-b')
+    options {
+        '-b'
+    }
+    source fileTree('src/main/coffee')
+    destinationDir file('src/main/webapp') //build/js')
+}
+
+task coffeeMaker (type: Exec) {
+    workingDir 'src/main/'
+    //println 'theDir=' + workingDir
+    commandLine 'coffee', '--bare', '--compile', '--output', 'webapp\\', 'coffee\\'
+}
+
+//build.dependsOn compileCoffee //coffeeMaker //
+//war.dependsOn coffeeMaker //

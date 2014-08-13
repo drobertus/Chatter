@@ -4,6 +4,7 @@ ehthumbs.db
 
 .idea/
 build/
+.gradle/
 
 # Folder config file
 Desktop.ini

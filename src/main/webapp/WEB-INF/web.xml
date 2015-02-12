@@ -3,16 +3,16 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
-    <!-- servlet>
-        <display-name>Servlet1</display-name>
-        <servlet-name>Servlet1</servlet-name>
-        <servlet-class>test.Servlet1</servlet-class>
+    <servlet>
+        <display-name>Chatter</display-name>
+        <servlet-name>chatter</servlet-name>
+        <servlet-class>com.mechzombie.chatter.ChatterWSServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>Servlet1</servlet-name>
-        <url-pattern>/Servlet1</url-pattern>
-    </servlet-mapping -->
+        <servlet-name>chatter</servlet-name>
+        <url-pattern>/chat</url-pattern>
+    </servlet-mapping>
 
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>

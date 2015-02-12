@@ -1,4 +1,9 @@
-addUserToList = (userName, listName) ->
+
+class Chatter =(webSocket) {
+
+webSocket : webSocket
+
+addUserToList : (userName, listName) ->
   userList = document.getElementById(listName) #'userList');
   option = document.createElement("option")
   option.text = userName
@@ -6,34 +11,41 @@ addUserToList = (userName, listName) ->
   return
 
 
-showMsg = (sender, theMsg) ->
+showMsg : (sender, theMsg) ->
   console.log "sender=" + sender
   console.log "sender=" + message
   receivedTexts = document.getElementById("receivedChats")
   receivedTexts.value += "from " + sender + "->" + theMsg
   return
 
+
 ###
 for use from the HTML interface- wraps the msg in the
 appropriate JSON wrapper
 ###
-sendChatMsg = (recipient, theMsg) ->
+sendChatMsg : (recipient, theMsg) ->
   send "{\"msgType\":\"sentMsg\", \"value\": {\"sentTo\": \"" + recipient + "\", \"msgBody\": \"" + theMsg + "\"}}"
   receivedTexts = document.getElementById("receivedChats")
   receivedTexts.value += "to " + recipient + "->" + theMsg
   return
 
-send = (msg) ->
-  ws.send msg
+send : (msg) ->
+  webSocket.send msg
   return
 
-ws = new WebSocket("ws://127.0.0.1:8555")
 
-ws.onopen = ->
+
+#ws : new WebSocket("ws://127.0.0.1:8555")
+
+webSocket : {
+    onopen : ->
   send "{\"msg\": \"Hello Server\"}"
   return
 
-ws.onmessage = (evt) ->
+  send : (msg) =>
+    webSocket.send msg
+
+  onmessage : (evt) ->
   msg = evt.data
   console.log "onMsg=" + msg
   obj = JSON.parse(msg)
@@ -56,13 +68,16 @@ ws.onmessage = (evt) ->
     else
       console.log "message type unrecognized"
 
-ws.onclose = ->
+onclose : ->
   alert "Closed!"
   return
 
-ws.onerror = (err) ->
+onerror : (err) ->
   alert "Error: " + err
   return
 
+}
+
 String::contains = (it) ->
   @indexOf(it) isnt -1
+}

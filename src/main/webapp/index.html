@@ -9,21 +9,27 @@
 <!-- script src="chatter.js"></script-->
 <!-- script src="angular.min.js"></script -->
 <form id="msg">
+    <div id="userNameDiv" style="display:block">
+        <input type="text" id="myName"/>
+        <input readonly="true" type="button" onclick="setMyName(document.getElementById('myName').value)"/>
+    </div>
+    <div id="chatDiv" style="display:none">
     <div>
-        <select id="userList"/>
+        <select id="userList" />
     </div>
     <div>
-        <input type="text" id="message"/>
+        <input type="text" id="message" />
+    </div>
+
+    <div>
+        <input readonly="true" type="button" onclick="sendChatMsg(document.getElementById('userList').value, document.getElementById('message').value)" >
     </div>
 
     <div>
-        <input readonly="true" type="button" onclick="sendChatMsg(document.getElementById('userList').value, document.getElementById('message').value)">
+        <textarea rows='15' cols="30" name="receivedChats" id="receivedChats" disabled></textarea>
     </div>
 
-    <div>
-        <textarea rows='15' cols="30" name="receivedChats" id="receivedChats"></textarea>
     </div>
-
 </form>
 
 </body>

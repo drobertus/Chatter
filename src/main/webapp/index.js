@@ -1,9 +1,9 @@
-var ws = new WebSocket("ws://127.0.0.1:8555");
-//var ws = new WebSocket("http://127.0.0.1:8555/chat");
+console.log("path=" + location.host + " + /chat");
+var ws = new WebSocket("ws://" + location.host + "/chat");
 
 ws.onopen = function() {
     //alert("Opened!");
-    send('{"msg": "Hello Server"}');
+    send('{"msgType": "hello"}');
 };
 
 ws.onmessage = function (evt) {
@@ -27,6 +27,14 @@ ws.onmessage = function (evt) {
      case 'userDelete' :
         removeUserFromList (value, 'userList');
         break;
+     case 'hello':
+        //we have connected= need to set a name
+        console.log('greeting received from server')
+        break;
+     case 'userRegistered':
+        //enable the UI components
+        enableUIForChat(value.registeredName);
+        break;
      case 'receiveMsg' :
         showMsg(value.sender, value.message);
         break;
@@ -40,6 +48,7 @@ ws.onmessage = function (evt) {
     }
 
 };
+
 
 function addUserToList(userName, listName) {
     var userList = document.getElementById(listName); //'userList');
@@ -59,9 +68,13 @@ ws.onerror = function(err) {
 
 function showMsg(sender, theMsg) {
     console.log('sender=' + sender);
-    console.log('sender=' + message);
+    console.log('message=' + theMsg);
     var receivedTexts = document.getElementById('receivedChats');
-    receivedTexts.value += 'from ' + sender + '->' + theMsg + '\n'
+    receivedTexts.value += 'from ' + sender + '->' + theMsg + '\n';
+}
+
+function setMyName(myName) {
+    send('{"msgType":"setUserName","value":{"name":"' + myName + '"}}');
 }
 /** for use from the HTML interface- wraps the msg in the
 appropriate JSON wrapper
@@ -69,10 +82,16 @@ appropriate JSON wrapper
 function sendChatMsg(recipient, theMsg){
 
     send( "{\"msgType\":\"sentMsg\", \"value\": {\"sentTo\": \"" +
-    recipient + "\", \"msgBody\": \"" + theMsg + "\"}}")
+    recipient + "\", \"msgBody\": \"" + theMsg + "\"}}");
 
     var receivedTexts = document.getElementById('receivedChats');
-    receivedTexts.value += 'to ' + recipient + '->' + theMsg + '\n'
+    receivedTexts.value += 'to ' + recipient + '->' + theMsg + '\n';
+}
+
+//this turns on the main part of the UI for
+function enableUIForChat(nameToUse) {
+    document.getElementById('chatDiv').style.display = 'block';
+    document.getElementById('userNameDiv').style.display = 'none';
 }
 
 function send(msg) {

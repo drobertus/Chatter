@@ -1,5 +1,7 @@
+class Chat (
+    constructor: (@ws) ->
 
-addUserToList = (userName, listName) ->
+addUserToList : (userName, listName) ->
   userList = document.getElementById(listName) #'userList');
   option = document.createElement("option")
   option.text = userName
@@ -7,7 +9,25 @@ addUserToList = (userName, listName) ->
   return
 
 
-showMsg = (sender, theMsg) ->
+showMsg : (sender, theMsg) ->
+  console.log "sender=" + sender
+  console.log "sender=" + message
+  receivedTexts = document.getElementById("receivedChats")
+  receivedTexts.value += "from " + sender + "->" + theMsg
+  return
+
+
+)
+
+addUserToList : (userName, listName) ->
+  userList = document.getElementById(listName) #'userList');
+  option = document.createElement("option")
+  option.text = userName
+  userList.add option
+  return
+
+
+showMsg : (sender, theMsg) ->
   console.log "sender=" + sender
   console.log "sender=" + message
   receivedTexts = document.getElementById("receivedChats")
@@ -18,17 +38,17 @@ showMsg = (sender, theMsg) ->
 for use from the HTML interface- wraps the msg in the
 appropriate JSON wrapper
 ###
-sendChatMsg = (recipient, theMsg) ->
+sendChatMsg : (recipient, theMsg) ->
   send "{\"msgType\":\"sentMsg\", \"value\": {\"sentTo\": \"" + recipient + "\", \"msgBody\": \"" + theMsg + "\"}}"
   receivedTexts = document.getElementById("receivedChats")
   receivedTexts.value += "to " + recipient + "->" + theMsg
   return
 
-send = (msg) ->
+send : (msg) ->
   ws.send msg
   return
 
-ws = new WebSocket("ws://127.0.0.1:8555")
+#ws = new WebSocket("ws://127.0.0.1:8555")
 
 ws.onopen = ->
   send "{\"msg\": \"Hello Server\"}"

@@ -33,9 +33,11 @@ public class RoomListingImpl implements RoomListing {
      */
     @Override
     void registerUser(final String id, final Session session, String userName) {
+        // TODO: this implementation will not scale well- we need to
+        // get some of this processing onto a separate thread
 
-        //String userName = theHello.getMsgParam('name')
-        //we need a case for an existing user
+        // String userName = theHello.getMsgParam('name')
+        // we need a case for an existing user
         if (registeredUsers.containsKey(userName)) {
             // TODO: send back an error message
             return;
@@ -43,7 +45,6 @@ public class RoomListingImpl implements RoomListing {
 
         if(connectedUsers.containsKey(id)) {
             println "adding user ${userName} for session ${id}"
-
             registeredUsers.put(userName.toString(), session)
             connectedUsers.remove(id.toString())
         }
@@ -55,7 +56,7 @@ public class RoomListingImpl implements RoomListing {
 
 
         def userList = BaseMessage.createEmptyBase(MessageType.userList)
-        userList.msgVal = getRegisteredUsers()
+        userList.msgVal = getRegisteredUsers(userName)
 
         sendMessageToUser(session, "room", userList)
 
@@ -81,12 +82,12 @@ public class RoomListingImpl implements RoomListing {
         registeredUsers.remove(userName);
 
         def dropUserMsg = BaseMessage.createEmptyBase(MessageType.userDrop)
-        addUserMsg.msgVal = userName
+        dropUserMsg.msgVal = userName
         registeredUsers.keySet().each { key ->
-            Session sess = registeredUsers.get(key)
-            if (session != sess) {
+            if (!key.equals(userName)) {
+                Session sess = registeredUsers.get(key)
                 try {
-                    sendMessageToUser(sess, userName, addUserMsg) //'{"msgType": "userAdd", "value": "' + id + '"}');
+                    sendMessageToUser(sess, userName, dropUserMsg) //'{"msgType": "userAdd", "value": "' + id + '"}');
                 }catch(WebSocketException wse) {
                     println wse
                     registeredUsers.remove(key)
@@ -125,9 +126,10 @@ public class RoomListingImpl implements RoomListing {
     }
 
     @Override
-    public Set<String> getRegisteredUsers() {
+    public Set<String> getRegisteredUsers(String userName) {
         Set<String> keyCopy = new HashSet<>();
         keyCopy.addAll(registeredUsers.keySet());
+        keyCopy.remove(userName)
         return keyCopy;
     }
 }

@@ -1,7 +1,13 @@
 package com.mechzombie.chatter.client
 
+import com.mechzombie.chatter.ChatterWSServlet
 import com.mechzombie.chatter.protocol.MessageType
+import com.sun.xml.internal.ws.transport.http.server.ServerContainer
 import org.eclipse.jetty.server.Server
+import org.eclipse.jetty.server.ServerConnector
+import org.eclipse.jetty.servlet.ServletContextHandler
+import org.eclipse.jetty.servlet.ServletHolder
+import org.eclipse.jetty.webapp.WebAppContext
 import org.eclipse.jetty.websocket.server.WebSocketHandler
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory
 import com.mechzombie.chatter.ChatterSocketListener
@@ -11,7 +17,7 @@ import static groovy.util.GroovyTestCase.assertEquals
 
 class ChatServerIntegTest extends Specification {
 
-    Server wsServer
+    Server server
     def wsClient1
     def wsClient2
     def serverPort = 8559
@@ -58,21 +64,15 @@ class ChatServerIntegTest extends Specification {
     }
 
     void setup() {
-        wsServer = new Server(serverPort);
-
-        WebSocketHandler wsHandler = new WebSocketHandler() {
-            @Override
-            public void configure(WebSocketServletFactory factory) {
-                factory.register(ChatterSocketListener.class);
-            }
-        };
-
-        wsServer.setHandler(wsHandler);
-        wsServer.start();
-
+        server = new Server(serverPort);
+        def context = new WebAppContext()
+        context.setResourceBase("./src/main/webapp")
+        server.setHandler(context)
+        server.start();
+        server.join()
     }
 
     void cleanup() {
-        wsServer.stop()
+        server.stop()
     }
 }

@@ -7,7 +7,8 @@ import java.io.IOException;
 import java.util.Set;
 
 /**
- * Created by David on 7/20/2014.
+ * This is the basic interface to conform to
+ * for the implementation
  */
 public interface RoomListing {
 
@@ -17,7 +18,10 @@ public interface RoomListing {
     public void removeSession(String id);
 
     public Set<String> getConnectedIds();
-    public Set<String> getRegisteredUsers();
+
+    public Set<String> getRegisteredUsers(String userToReturnTo);
+
     void sendMessageToUser(String to, BaseMessage msg) throws Exception;
+
     void sendMessageToUser(Session to, String from, BaseMessage message)throws IOException;
 }

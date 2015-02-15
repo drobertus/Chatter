@@ -14,8 +14,6 @@ enum MessageType {
     error(false),
     userRegistered(false, ['registeredName'])
 
-
-
     def listOfValues
     def params= []
     MessageType(boolean valList, List<String> params = null) {

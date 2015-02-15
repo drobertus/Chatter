@@ -101,7 +101,7 @@ class BaseMessage {
             msgVal.put(paramName, value)
         }
         else {
-            throw new NoSuchFieldException("The property '${paramName} not found for message type ${msgType.toString()}")
+            throw new NoSuchFieldException("The property '${paramName}' not found for message type ${msgType.toString()}")
         }
     }
 }
